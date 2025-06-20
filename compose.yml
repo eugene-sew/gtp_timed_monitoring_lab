@@ -1,4 +1,5 @@
 services:
+  # setting up prometheus
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -10,6 +11,7 @@ services:
       - 9090:9090
 
   node-exporter:
+    # setting up node-exporter
     image: prom/node-exporter:latest
     container_name: node-exporter
     restart: unless-stopped
@@ -25,6 +27,17 @@ services:
     ports:
       - 9100:9100
 
+  grafana:
+    # setting up grafana to visualize the metrics
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
 networks:
   default:
     name: prometheus-grafana
@@ -32,3 +45,4 @@ networks:
 
 volumes:
   prometheus_data:
+  grafana_data:
